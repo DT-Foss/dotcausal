@@ -27,7 +27,7 @@ Author: David Tom Foss <david@foss.com.de>
 License: MIT
 """
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 __author__ = "David Tom Foss"
 
 from .core import (
@@ -50,6 +50,7 @@ from .inference import (
     run_inference,
     detect_mechanism_direction,
     jaro_winkler_similarity,
+    calculate_auto_threshold,
     TrigramIndex,
 )
 
@@ -70,6 +71,7 @@ __all__ = [
     "run_inference",
     "detect_mechanism_direction",
     "jaro_winkler_similarity",
+    "calculate_auto_threshold",
     "TrigramIndex",
     # Constants
     "MAGIC",

@@ -27,6 +27,48 @@ from .core import (
 
 
 # =============================================================================
+# AUTO-THRESHOLD CALIBRATION
+# =============================================================================
+
+def calculate_auto_threshold(entities: List[str]) -> float:
+    """
+    Auto-calibrate Jaro-Winkler threshold based on entity characteristics.
+
+    Short entities (medical terms) → stricter threshold
+    Long entities (scientific sentences) → looser threshold
+
+    Returns:
+        Recommended threshold value (0.72-0.88)
+    """
+    if not entities:
+        return 0.78  # Default
+
+    # Calculate average words per entity
+    word_counts = [len(e.split()) for e in entities]
+    avg_words = sum(word_counts) / len(word_counts)
+
+    # Calculate entity reuse ratio
+    unique_entities = len(set(e.lower().strip() for e in entities))
+    reuse_ratio = len(entities) / max(unique_entities, 1)
+
+    # Threshold based on entity length
+    if avg_words <= 3:
+        base_threshold = 0.88  # Very strict for short terms
+    elif avg_words <= 5:
+        base_threshold = 0.85  # Standard
+    elif avg_words <= 8:
+        base_threshold = 0.78  # Looser for sentences
+    else:
+        base_threshold = 0.72  # Very loose for long descriptions
+
+    # Adjust for reuse ratio (high reuse = can be stricter)
+    if reuse_ratio > 1.5:
+        base_threshold = min(base_threshold + 0.03, 0.90)
+
+    return round(base_threshold, 2)
+
+
+# =============================================================================
 # TRIGRAM INDEX FOR FAST FUZZY MATCHING
 # =============================================================================
 
@@ -349,7 +391,8 @@ def find_similar_entities_indexed(
 def run_inference(
     explicit: List[Dict],
     entities: List[str],
-    rules: List[Dict] = None
+    rules: List[Dict] = None,
+    threshold: str | float = "auto"
 ) -> List[Dict]:
     """
     Run the three-pass inference engine.
@@ -359,12 +402,21 @@ def run_inference(
             trigger, mechanism, outcome, confidence, s_idx, m_idx, o_idx
         entities: List of entity strings (index matches s_idx/m_idx/o_idx)
         rules: Optional custom rules (defaults to DEFAULT_INFERENCE_RULES)
+        threshold: Jaro-Winkler threshold for fuzzy matching.
+            - "auto": Auto-calibrate based on entity characteristics (recommended)
+            - float: Manual threshold (0.0-1.0)
 
     Returns:
         List of inferred triplet dicts.
     """
     if rules is None:
         rules = DEFAULT_INFERENCE_RULES
+
+    # Auto-calibrate threshold if needed
+    if threshold == "auto":
+        jw_threshold = calculate_auto_threshold(entities)
+    else:
+        jw_threshold = float(threshold)
 
     inferred = []
     seen = set()
@@ -520,7 +572,8 @@ def run_inference(
     timeout = INFERENCE_CONFIG['timeout_seconds']
     max_inferred = INFERENCE_CONFIG['max_inferred_triplets']
     max_candidates = INFERENCE_CONFIG['max_fuzzy_candidates']
-    threshold = INFERENCE_CONFIG['jaro_winkler_threshold']
+    # Use auto-calibrated or manual threshold
+    fuzzy_threshold = jw_threshold
 
     # Build trigram index
     trigram_index = TrigramIndex()
@@ -538,7 +591,7 @@ def run_inference(
         similar = find_similar_entities_indexed(
             outcome,
             trigram_index,
-            threshold=threshold,
+            threshold=fuzzy_threshold,
             max_candidates=max_candidates
         )
 
