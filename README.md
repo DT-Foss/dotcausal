@@ -47,6 +47,9 @@ COVID → indirectly causes → fatigue  (INFERRED, deterministic)
 
 ```bash
 pip install dotcausal
+
+# With LangChain integration
+pip install dotcausal[langchain]
 ```
 
 ## Quick Start
@@ -118,6 +121,43 @@ dotcausal validate knowledge.causal
 **Auto-threshold calibration** (v0.2.0+): The fuzzy matching threshold automatically adapts based on entity characteristics:
 - Short medical terms → strict (0.88)
 - Long scientific phrases → loose (0.72)
+
+## LangChain Integration
+
+Use `.causal` as a drop-in retriever for any LangChain pipeline:
+
+```python
+from dotcausal import CausalRetriever
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+# Load knowledge graph as retriever
+retriever = CausalRetriever.from_file("knowledge.causal", top_k=10)
+
+# Build RAG chain
+prompt = ChatPromptTemplate.from_template("""
+Answer based on these verified facts:
+{context}
+
+Question: {question}
+""")
+
+chain = (
+    {"context": retriever, "question": lambda x: x}
+    | prompt
+    | ChatOpenAI(model="gpt-4")
+    | StrOutputParser()
+)
+
+# Query with zero hallucination grounding
+response = chain.invoke("What mechanisms connect COVID to chronic fatigue?")
+```
+
+The retriever returns `Document` objects with rich metadata:
+- `is_inferred`: Whether the fact was derived or explicit
+- `confidence`: Confidence score (0-1)
+- `provenance`: Chain of source triplets for inferred facts
 
 ## Use Cases
 

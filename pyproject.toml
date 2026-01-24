@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dotcausal"
-version = "0.2.1"
+version = "0.3.0"
 description = "Binary Knowledge Graph Format with Embedded Inference for AI Applications"
 readme = "README.md"
 license = {text = "MIT"}
@@ -44,11 +44,17 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+langchain = [
+    "langchain-core>=0.2.0",
+]
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "black>=23.0.0",
     "ruff>=0.1.0",
+]
+all = [
+    "dotcausal[langchain]",
 ]
 
 [project.urls]

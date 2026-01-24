@@ -27,7 +27,7 @@ Author: David Tom Foss <david@foss.com.de>
 License: MIT
 """
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"
 __author__ = "David Tom Foss"
 
 from .core import (
@@ -54,6 +54,14 @@ from .inference import (
     TrigramIndex,
 )
 
+# Optional LangChain integration
+try:
+    from .langchain import CausalRetriever, create_causal_retriever, HAS_LANGCHAIN
+except ImportError:
+    HAS_LANGCHAIN = False
+    CausalRetriever = None
+    create_causal_retriever = None
+
 __all__ = [
     # Version
     "__version__",
@@ -73,6 +81,10 @@ __all__ = [
     "jaro_winkler_similarity",
     "calculate_auto_threshold",
     "TrigramIndex",
+    # LangChain (optional)
+    "CausalRetriever",
+    "create_causal_retriever",
+    "HAS_LANGCHAIN",
     # Constants
     "MAGIC",
     "VERSION",
