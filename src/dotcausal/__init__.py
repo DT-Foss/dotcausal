@@ -27,7 +27,7 @@ Author: David Tom Foss <david@foss.com.de>
 License: MIT
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __author__ = "David Tom Foss"
 
 from .core import (

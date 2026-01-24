@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dotcausal"
-version = "0.2.0"
+version = "0.2.1"
 description = "Binary Knowledge Graph Format with Embedded Inference for AI Applications"
 readme = "README.md"
 license = {text = "MIT"}
