@@ -7,7 +7,7 @@ name = "dotcausal"
 version = "0.3.0"
 description = "Binary Knowledge Graph Format with Embedded Inference for AI Applications"
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "PolyForm-Noncommercial-1.0.0"}
 requires-python = ">=3.9"
 authors = [
     {name = "David Tom Foss", email = "david@foss.com.de"}
@@ -26,7 +26,7 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
+    "License :: Other/Proprietary License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",

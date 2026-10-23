@@ -3,7 +3,7 @@
 **The Knowledge Graph Format for AI**
 
 [![PyPI version](https://badge.fury.io/py/dotcausal.svg)](https://badge.fury.io/py/dotcausal)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](LICENSE)
 
 The `.causal` format is a binary knowledge graph format with **embedded deterministic inference**. It solves the fundamental problem of AI-assisted discovery: **LLMs hallucinate, databases don't reason**.
 
@@ -224,8 +224,4 @@ If you use `.causal` in your research, please cite:
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
-
----
-
-*"The era of probabilistic guessing is ending; the era of deterministic discovery has begun."*
+PolyForm Noncommercial License 1.0.0. See [LICENSE](LICENSE). Commercial licenses: Wirkung Inc. (d.foss@ieee.org).

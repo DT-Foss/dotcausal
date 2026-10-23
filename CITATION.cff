@@ -11,7 +11,7 @@ authors:
     email: "david@foss.com.de"
 repository-code: "https://github.com/dotcausal/dotcausal"
 url: "https://dotcausal.com"
-license: MIT
+license: PolyForm-Noncommercial-1.0.0
 keywords:
   - knowledge-graph
   - causal-inference
